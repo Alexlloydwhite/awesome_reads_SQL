@@ -8,6 +8,7 @@ function addClickHandlers() {
   $('#submitBtn').on('click', handleSubmit);
   // TODO - Add code for edit & delete buttons
   $('#bookShelf').on('click', '.delete-book', deleteBookHandler);
+  $('#bookShelf').on('click', '.edit-read', readBookHandler);
 }
 
 function handleSubmit() {
@@ -60,13 +61,36 @@ function renderBooks(books) {
         <td>
           <button type="button" class="delete-book" data-id="${books[i].id}">
             Delete Book
-          </button
+          </button>
+          <button type="button" class="edit-read" data-id="${books[i].id}">
+            Mark as Read
+          </button>
         </td>
       </tr>
     `)   
     // For each book, append a new row to our table
     $('#bookShelf').append(newRow);
   }
+}
+
+function readBookHandler(){
+  markAsRead( $(this).data("id"), "read" );
+}
+
+function markAsRead(bookId, isRead){
+  $.ajax({
+    method: 'PUT',
+    url: `/books/${bookId}`,
+    data: {
+      isRead: isRead
+    }
+  })
+  .then(response => {
+    refreshBooks();
+  })
+  .catch(error => {
+    console.log('error on book mark as read.', error);
+  })
 }
 
 function deleteBookHandler(){
