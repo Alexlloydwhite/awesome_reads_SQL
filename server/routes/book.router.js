@@ -41,7 +41,7 @@ router.post('/',  (req, res) => {
 router.put('/:id', (req, res) => {
   let bookId = req.params.id;
 
- let queryText = `UPDATE "books" SET "isRead" = 'true' WHERE "id"=$1;`;
+  let queryText = `UPDATE "books" SET "isRead" = 'true' WHERE "id"=$1;`;
 
   pool.query( queryText, [bookId] )
     .then(response => {
