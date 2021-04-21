@@ -50,15 +50,38 @@ function refreshBooks() {
 // Displays an array of books to the DOM
 function renderBooks(books) {
   $('#bookShelf').empty();
-
+  
   for(let i = 0; i < books.length; i += 1) {
-    let book = books[i];
-    // For each book, append a new row to our table
-    $('#bookShelf').append(`
+      let newRow = $(`
       <tr>
-        <td>${book.title}</td>
-        <td>${book.author}</td>
+        <td>${books[i].title}</td>
+        <td>${books[i].author}</td>
+        <td>
+          <button type="button" class="delete-book" data-id="${books[i].id}">
+            Delete Book
+          </button
+        </td>
       </tr>
-    `);
+    `)   
+    // For each book, append a new row to our table
+    $('#bookShelf').append(newRow);
   }
+}
+
+function deleteBookHandler(){
+  deleteBook( $(this).data("id") );
+}
+
+function deleteBook(bookId) {
+  $.ajax({
+    method: 'DELETE',
+    url: `/books/${bookId}`
+  })
+  .then(response => {
+    console.log('Deleted it, WOOT!');
+    refreshBooks();
+  })
+  .catch(error => {
+    alert(`Error on delete`, error);
+  })
 }
